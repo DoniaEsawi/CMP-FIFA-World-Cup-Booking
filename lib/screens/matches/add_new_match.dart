@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:fifa2022/screens/shared_widgets/unauthorized.dart';
 import 'package:fifa2022/services/auth_service.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tab_container/tab_container.dart';
@@ -51,10 +52,11 @@ class _CreateEditMatchDetailsState extends State<CreateEditMatchDetails>
   void initState() {
 
     // TODO: implement initState
-    super.initState();
+
     tabContainerController=TabContainerController(length: 2);
     animationController=   AnimationController(vsync: this,
         duration: const Duration(seconds: 2))..repeat();
+    if(Globals.isLoggedIn&&Globals.isManager){
     Future.delayed(Duration.zero, ()
     async{
       showAlertDialog(context, animationController);
@@ -77,6 +79,8 @@ class _CreateEditMatchDetailsState extends State<CreateEditMatchDetails>
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     });
+    }
+    super.initState();
   }
   @override
   void dispose() {
@@ -124,8 +128,8 @@ class _CreateEditMatchDetailsState extends State<CreateEditMatchDetails>
     return Scaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: mainRed,
-      appBar: const AppBarCustom(page: Pages.addMatch,),
-      body: Container(
+      appBar: (Globals.isLoggedIn&&Globals.isManager)?const AppBarCustom(page: Pages.addMatch,):null,
+      body:(Globals.isLoggedIn&&Globals.isManager)? Container(
 
         decoration: const BoxDecoration(
           color: mainRed,
@@ -670,7 +674,7 @@ class _CreateEditMatchDetailsState extends State<CreateEditMatchDetails>
             ]
           ),
         ),
-      ),
+      ):const UnauthorizedWidget(),
     );
   }
   Future<Map<String, dynamic>> addNewStad()

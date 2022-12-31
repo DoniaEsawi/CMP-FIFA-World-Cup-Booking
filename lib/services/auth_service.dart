@@ -1,25 +1,24 @@
 import 'dart:convert';
 
+import 'package:fifa2022/config/globals.dart';
 import 'package:fifa2022/models/user.dart';
 import 'package:http/http.dart' as http;
 
 class AuthService {
   final String _weirdConnection = '''
             {
-              "meta": {
-                        "status": "502",
-                         "msg": "Weird Connection. Try Again?"
-                      }
+              "success": false,
+              "message":"Weird Connection. Try Again?"
             }
         ''';
 
   final String _failed = '''
+            
             {
-              "meta": {
-                        "status": "404",
-                         "msg": "Failed to Connect to the server"
-                      }
+              "success": false,
+              "message":"Failed to Connect to the server"
             }
+             
         ''';
   /// When an error occur with any [Api] request
   http.Response errorFunction(
@@ -33,8 +32,9 @@ class AuthService {
       return http.Response(_failed, 404);
     }
   }
+
   Future<dynamic> registerUser(Map<String, dynamic>? userData) async {
-    var url= 'http://127.0.0.1:8000/api/users/create';
+    var url= '${Globals.baseUrl}/api/users/create';
     var response = await http.post(
         Uri.parse(url),
         body: userData,
@@ -72,7 +72,7 @@ class AuthService {
   }
 
   Future<dynamic> login(String username, String password) async {
-    var url= 'http://127.0.0.1:8000/api/users/login';
+    var url= '${Globals.baseUrl}/api/users/login';
       var response = await http.post(
           Uri.parse(url),
           body: {
@@ -114,7 +114,7 @@ class AuthService {
   }
 
   Future<dynamic> getUserInfo(String token) async {
-    var url= 'http://127.0.0.1:8000/api/user';
+    var url= '${Globals.baseUrl}/api/user';
 
       var response = await http.get(
           Uri.parse(url),
@@ -139,7 +139,7 @@ class AuthService {
     }
 
   Future<void> logOut(String token) async {
-    var url= 'http://127.0.0.1:8000/api/users/logout';
+    var url= '${Globals.baseUrl}/api/users/logout';
     var response = await http.post(
         Uri.parse(url),
         headers: {'Accept': 'application/json',
@@ -170,7 +170,7 @@ class AuthService {
 
   }
   Future<void> updateUserInfo(String token, User user, [String? pass]) async {
-    var url= 'http://127.0.0.1:8000/api/users/update';
+    var url= '${Globals.baseUrl}/api/users/update';
     var response = await http.post(
         Uri.parse(url),
         body: pass!=null?{

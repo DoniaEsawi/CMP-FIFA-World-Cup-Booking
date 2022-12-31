@@ -2,6 +2,7 @@
 
 import 'dart:math';
 
+import 'package:email_validator/email_validator.dart';
 import 'package:fifa2022/config/constants.dart';
 import 'package:fifa2022/config/enums.dart';
 import 'package:fifa2022/config/globals.dart';
@@ -39,6 +40,30 @@ class _LoginFormState extends State<LoginForm> with SingleTickerProviderStateMix
   late TextEditingController _textEditingControllerPass;
   final ApiClient _apiClient = ApiClient();
   late final AnimationController _controller;
+  bool usernameHasError=false;
+  bool passwordHasError=false;
+  bool validateInput(){
+    bool success=true;
+    if(_textEditingControllerUserName.text.isEmpty||
+        _textEditingControllerUserName.text.contains(RegExp(r"[^a-zA-Z0-9_]")))
+    {
+      setState(() {
+        usernameHasError=true;
+      });
+
+      success= false;
+    }
+    if(_textEditingControllerPass.text.length<6)
+    {
+      setState(() {
+        passwordHasError=true;
+      });
+
+      success= false;
+    }
+
+    return success;
+  }
 
   @override
   void initState() {
@@ -64,7 +89,10 @@ class _LoginFormState extends State<LoginForm> with SingleTickerProviderStateMix
   Widget build(BuildContext context) {
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
     Future<void> loginUsers() async {
-
+      if(!validateInput())
+        {
+          return;
+        }
       showAlertDialog(context, _controller);
 
       try {
@@ -87,9 +115,8 @@ class _LoginFormState extends State<LoginForm> with SingleTickerProviderStateMix
       }
       catch(e)
       {
-        print(e);
-
         Navigator.pop(context);
+        showErrorSnackBar(context, e.toString());
 
       }
     }
@@ -120,9 +147,14 @@ class _LoginFormState extends State<LoginForm> with SingleTickerProviderStateMix
         InputAuth(screenHeight: widget.screenHeight,
           isSmallScreen: widget.isSmallScreen,
           textEditingController: _textEditingControllerUserName,
-          type: AuthInputType.username,),
+          type: AuthInputType.username,
+            hasError: usernameHasError,
+          errorMsg: "username should not be empty and only contains letters, digits and underscores",
+        ),
         const SizedBox(height: 16,),
         InputAuth(screenHeight: widget.screenHeight,
+          hasError: passwordHasError,
+          errorMsg: "password length must be less than 6",
           isSmallScreen:widget.isSmallScreen,
           textEditingController: _textEditingControllerPass,
           type: AuthInputType.password,),
@@ -171,6 +203,64 @@ class _SignUpFormState extends State<SignUpForm>  with SingleTickerProviderState
   bool enteredDate=false;
   late final AnimationController _controller;
   final ApiClient _apiClient = ApiClient();
+  bool emailHasError=false;
+  bool passHasError=false;
+  bool usernameHasError=false;
+  bool fnameHasError=false;
+  bool lnameHasError=false;
+  bool dateHasError=false;
+
+
+  bool validateInput(){
+    bool success=true;
+    if(_textEditingControllerFname.text.isEmpty)
+      {
+        setState(() {
+          fnameHasError=true;
+        });
+        success= false;
+      }
+    if(_textEditingControllerLname.text.isEmpty)
+    {
+      setState(() {
+        lnameHasError=true;
+      });
+      success= false;
+    }
+    if( _textEditingControllerEmail.text.isEmpty||
+        EmailValidator.validate(_textEditingControllerEmail.text)==false)
+    {
+      setState(() {
+        emailHasError=true;
+      });
+      success= false;
+    }
+    if(_textEditingControllerPass.text.length<6)
+    {
+      setState(() {
+        passHasError=true;
+      });
+
+      success= false;
+    }
+    if(_textEditingControllerUname.text.isEmpty||
+        _textEditingControllerUname.text.contains(RegExp(r"[^a-zA-Z0-9_]")))
+      {
+        setState(() {
+          usernameHasError=true;
+        });
+
+        success= false;
+      }
+    if(enteredDate==false)
+    {
+      setState(() {
+        dateHasError;
+      });
+      success= false;
+    }
+    return success;
+  }
   @override
   void initState() {
     super.initState();
@@ -209,7 +299,10 @@ class _SignUpFormState extends State<SignUpForm>  with SingleTickerProviderState
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
 
     Future<void> handleRegister() async {
-
+      if(!validateInput())
+        {
+          return;
+        }
       showAlertDialog(context, _controller);
       Map<String, dynamic> userData = {
         "username":_textEditingControllerUname.text,
@@ -220,6 +313,7 @@ class _SignUpFormState extends State<SignUpForm>  with SingleTickerProviderState
         "nationality":_textEditingControllerNationality.text!=""?
         _textEditingControllerNationality.text:null,
         "role":roleIndexSelected==0?"fan":"manager",
+
         "email":_textEditingControllerEmail.text,
         "password":_textEditingControllerPass.text
       };
@@ -241,9 +335,9 @@ class _SignUpFormState extends State<SignUpForm>  with SingleTickerProviderState
       }
       catch(e)
       {
-        print(e);
-        Navigator.pop(context);
 
+        Navigator.pop(context);
+        showErrorSnackBar(context, e.toString());
       }
 
 
@@ -277,11 +371,15 @@ class _SignUpFormState extends State<SignUpForm>  with SingleTickerProviderState
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         InputAuth(screenHeight: widget.screenHeight,
+                          hasError: fnameHasError,
+                          errorMsg: "First Name should not be empty",
                           isSmallScreen: widget.isSmallScreen,
                           textEditingController: _textEditingControllerFname,
                           type: AuthInputType.firstName,),
                         const SizedBox(width: 4,),
                         InputAuth(screenHeight: widget.screenHeight,
+                          hasError: lnameHasError,
+                          errorMsg: "Last Name should not be empty",
                           isSmallScreen: widget.isSmallScreen,
                           textEditingController:_textEditingControllerLname,
                           type: AuthInputType.lastName,),
@@ -292,10 +390,14 @@ class _SignUpFormState extends State<SignUpForm>  with SingleTickerProviderState
                       children: [
                         InputAuth(screenHeight: widget.screenHeight,
                           isSmallScreen: widget.isSmallScreen,
+                          hasError: fnameHasError,
+                          errorMsg: "First Name should not be empty",
                           textEditingController: _textEditingControllerFname,
                           type: AuthInputType.firstName,),
                         const SizedBox(height: 16,),
                         InputAuth(screenHeight: widget.screenHeight,
+                          hasError: lnameHasError,
+                          errorMsg: "Last Name should not be empty",
                           isSmallScreen: widget.isSmallScreen,
                           textEditingController:_textEditingControllerLname,
                           type: AuthInputType.lastName,),
@@ -303,16 +405,22 @@ class _SignUpFormState extends State<SignUpForm>  with SingleTickerProviderState
                     ),
                     const SizedBox(height: 16,),
                     InputAuth(screenHeight: widget.screenHeight,
+                      hasError: usernameHasError,
+                      errorMsg: "username should only contains letters, digits or underscores",
                       isSmallScreen: widget.isSmallScreen,
                       textEditingController: _textEditingControllerUname,
                       type: AuthInputType.username,),
                     const SizedBox(height: 16,),
                     InputAuth(screenHeight: widget.screenHeight,
+                      errorMsg: "please write correct email",
+                      hasError: emailHasError,
                       isSmallScreen: widget.isSmallScreen,
                       textEditingController: _textEditingControllerEmail,
                       type: AuthInputType.email,),
                     const SizedBox(height: 16,),
                     InputAuth(screenHeight: widget.screenHeight,
+                      hasError: passHasError,
+                      errorMsg: "password shouldn't be less that 6 characters",
                       isSmallScreen:widget.isSmallScreen,
                       textEditingController: _textEditingControllerPass,
                       type: AuthInputType.password,),
@@ -321,6 +429,8 @@ class _SignUpFormState extends State<SignUpForm>  with SingleTickerProviderState
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         InputAuth(screenHeight: 0.5*widget.screenHeight,
+                          hasError: dateHasError,
+                          errorMsg: "please choose a date",
                           isSmallScreen: widget.isSmallScreen,
                           textEditingController: TextEditingController(),
                           type: AuthInputType.age,
@@ -334,6 +444,8 @@ class _SignUpFormState extends State<SignUpForm>  with SingleTickerProviderState
                         ),
                         const SizedBox(width: 4,),
                         InputAuth(screenHeight: 0.5*widget.screenHeight,
+                          hasError: false,
+                          errorMsg: "",
                           isSmallScreen: widget.isSmallScreen,
                           textEditingController: _textEditingControllerNationality,
                           type: AuthInputType.country,),
@@ -342,6 +454,8 @@ class _SignUpFormState extends State<SignUpForm>  with SingleTickerProviderState
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         InputAuth(screenHeight: 0.5*widget.screenHeight,
+                          hasError: dateHasError,
+                          errorMsg: "please choose a date",
                           isSmallScreen: widget.isSmallScreen,
                           textEditingController: TextEditingController(),
                           type: AuthInputType.age,
@@ -355,6 +469,8 @@ class _SignUpFormState extends State<SignUpForm>  with SingleTickerProviderState
                         ),
                         const SizedBox(height: 16,),
                         InputAuth(screenHeight: 0.5*widget.screenHeight,
+                          hasError: false,
+                          errorMsg: "",
                           isSmallScreen: widget.isSmallScreen,
                           textEditingController: _textEditingControllerNationality,
                           type: AuthInputType.country,),
@@ -607,9 +723,11 @@ class AuthButton extends StatelessWidget {
   }
 }
 
-class InputAuth extends StatelessWidget {
+class InputAuth extends StatefulWidget {
   InputAuth({
   super.key,
+  required this.hasError,
+  required this.errorMsg,
   required this.screenHeight,
   required this.isSmallScreen,
   required TextEditingController textEditingController,
@@ -629,24 +747,43 @@ class InputAuth extends StatelessWidget {
   String? selectedDate;
   String? defaultValue;
   bool?enabled;
+  bool hasError;
+  final String errorMsg;
+
+  @override
+  State<InputAuth> createState() => _InputAuthState();
+}
+
+class _InputAuthState extends State<InputAuth> {
+  bool hasErrorState=false;
+  @override
+  void initState() {
+    setState(() {
+      hasErrorState=widget.hasError;
+    });
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
+    hasErrorState=widget.hasError;
     return GestureDetector(
       onTap: (){
-        if(type==AuthInputType.age)
+
+        if(widget.type==AuthInputType.age)
           {
-            onClickingDate!.call();
+            widget.onClickingDate!.call();
           }
       },
       child: Container(
-        width: (!isSmallScreen)?0.5*
-            ((type==AuthInputType.lastName||type==AuthInputType.firstName)?0.5:1.0)*
-        screenHeight:null,
+        width: (!widget.isSmallScreen)?0.5*
+            ((widget.type==AuthInputType.lastName||widget.type==AuthInputType.firstName)?0.5:1.0)*
+        widget.screenHeight:null,
         decoration:  BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
-              color: mainRed,
+              color: hasErrorState?Colors.red:mainRed,
               width: 2,
 
             )
@@ -654,43 +791,50 @@ class InputAuth extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            (type!=AuthInputType.firstName&&type!=AuthInputType.lastName)?
+            (widget.type!=AuthInputType.firstName&&widget.type!=AuthInputType.lastName)?
             Padding(
               padding:const EdgeInsets.symmetric(horizontal: 16.0),
               child:
               Icon(
-                type==AuthInputType.password?Icons.password:
-                type==AuthInputType.email?
-                Icons.email:type==AuthInputType.username?Icons.person:
-                type==AuthInputType.age?Icons.cake:Icons.flag,
+                widget.type==AuthInputType.password?Icons.password:
+                widget.type==AuthInputType.email?
+                Icons.email:widget.type==AuthInputType.username?Icons.person:
+                widget.type==AuthInputType.age?Icons.cake:Icons.flag,
                 color: mainRed, size: 20,),
             ):Container(
               width: 20,
             ),
             Expanded(
               child: TextFormField(
-                enabled: enabled,
+                enabled: widget.enabled,
+
                 obscuringCharacter: '⁕',
-                obscureText: (type==AuthInputType.password)?true:false,
-                controller: _textEditingController,
-                keyboardType: (type==AuthInputType.email)?TextInputType.emailAddress:
-                (type==AuthInputType.password)?TextInputType.visiblePassword:
-                (type==AuthInputType.firstName)?TextInputType.text:
-                (type==AuthInputType.lastName)?TextInputType.text:
-                (type==AuthInputType.country)?TextInputType.text:
-                (type==AuthInputType.username)?TextInputType.name:
+                obscureText: (widget.type==AuthInputType.password)?true:false,
+                controller: widget._textEditingController,
+                keyboardType: (widget.type==AuthInputType.email)?TextInputType.emailAddress:
+                (widget.type==AuthInputType.password)?TextInputType.visiblePassword:
+                (widget.type==AuthInputType.firstName)?TextInputType.text:
+                (widget.type==AuthInputType.lastName)?TextInputType.text:
+                (widget.type==AuthInputType.country)?TextInputType.text:
+                (widget.type==AuthInputType.username)?TextInputType.name:
                 TextInputType.number,
+                onChanged: (val){
+                  setState(() {
+                    hasErrorState=false;
+                  });
+                },
                 decoration:  InputDecoration(
 
-                  hintText: placeHolder!="none"?placeHolder:
-                  (type==AuthInputType.email)?"Email Address":
-                  (type==AuthInputType.password)?"Password":
-                  (type==AuthInputType.firstName)?"First Name":
-                  (type==AuthInputType.lastName)?"Last Name":
-                  (type==AuthInputType.username)?"Username":
-                  (type==AuthInputType.age)?selectedDate:"Nationality",
+                  errorText: hasErrorState?widget.errorMsg:null,
+                  hintText: widget.placeHolder!="none"?widget.placeHolder:
+                  (widget.type==AuthInputType.email)?"Email Address":
+                  (widget.type==AuthInputType.password)?"Password":
+                  (widget.type==AuthInputType.firstName)?"First Name":
+                  (widget.type==AuthInputType.lastName)?"Last Name":
+                  (widget.type==AuthInputType.username)?"Username":
+                  (widget.type==AuthInputType.age)?widget.selectedDate:"Nationality",
                   enabledBorder: InputBorder.none,
-                  enabled: !(type==AuthInputType.age),
+                  enabled: !(widget.type==AuthInputType.age),
                   border: InputBorder.none,
                   focusedBorder: InputBorder.none,
                   errorBorder: InputBorder.none,

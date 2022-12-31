@@ -7,20 +7,18 @@ import 'package:http/http.dart' as http;
 class TicketsServices{
   final String _weirdConnection = '''
             {
-              "meta": {
-                        "status": "502",
-                         "msg": "Weird Connection. Try Again?"
-                      }
+              "success": false,
+              "message":"Weird Connection. Try Again?"
             }
         ''';
 
   final String _failed = '''
+            
             {
-              "meta": {
-                        "status": "404",
-                         "msg": "Failed to Connect to the server"
-                      }
+              "success": false,
+              "message":"Failed to Connect to the server"
             }
+             
         ''';
   /// When an error occur with any [Api] request
   http.Response errorFunction(
@@ -36,7 +34,7 @@ class TicketsServices{
   }
 
   Future<dynamic> getAllTicketsOfUser() async {
-    var url= 'http://127.0.0.1:8000/api/ticket/allreserved';
+    var url= '${Globals.baseUrl}/api/ticket/allreserved';
 
     var response = await http.get(
         Uri.parse(url),
@@ -62,7 +60,7 @@ class TicketsServices{
     }
   }
   Future<void> deleteTicketWithId(int id) async {
-    var url= 'http://127.0.0.1:8000/api/ticket/destroy/$id';
+    var url= '${Globals.baseUrl}/api/ticket/destroy/$id';
 
     var response = await http.delete(
         Uri.parse(url),
@@ -88,7 +86,7 @@ class TicketsServices{
 
   }
   Future<dynamic> reserveTicket(TicketModel ticket) async {
-    var url= 'http://127.0.0.1:8000/api/ticket/store';
+    var url= '${Globals.baseUrl}/api/ticket/store';
 
     var response = await http.post(
         Uri.parse(url),

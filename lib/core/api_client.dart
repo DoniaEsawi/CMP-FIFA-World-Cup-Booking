@@ -1,4 +1,5 @@
 import "package:dio/dio.dart";
+import "package:fifa2022/config/globals.dart";
 class ApiClient {
   final Dio _dio = Dio();
 
@@ -6,7 +7,7 @@ class ApiClient {
     //IMPLEMENT USER REGISTRATION
     try {
       Response response = await _dio.post(
-          'http://127.0.0.1:8000/api/users/create',  //ENDPONT URL
+          '${Globals.baseUrl}/api/users/create',  //ENDPONT URL
           data: userData, //REQUEST BODY
           options: Options(headers: {'Accept': 'application/json', //HEADERS
           }));
@@ -21,7 +22,7 @@ class ApiClient {
   Future<dynamic> login(String username, String password) async {
     try {
       Response response = await _dio.post(
-        'http://127.0.0.1:8000/api/users/login',
+        '${Globals.baseUrl}/api/users/login',
         data: {
           'username': username,
           'password': password

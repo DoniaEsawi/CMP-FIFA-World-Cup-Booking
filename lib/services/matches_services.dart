@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:fifa2022/config/globals.dart';
 import 'package:fifa2022/models/match.dart';
 import 'package:fifa2022/models/stadium.dart';
 import 'package:fifa2022/models/user.dart';
@@ -7,20 +8,18 @@ import 'package:http/http.dart' as http;
 class MatchesServices{
   final String _weirdConnection = '''
             {
-              "meta": {
-                        "status": "502",
-                         "msg": "Weird Connection. Try Again?"
-                      }
+              "success": false,
+              "message":"Weird Connection. Try Again?"
             }
         ''';
 
   final String _failed = '''
+            
             {
-              "meta": {
-                        "status": "404",
-                         "msg": "Failed to Connect to the server"
-                      }
+              "success": false,
+              "message":"Failed to Connect to the server"
             }
+             
         ''';
   /// When an error occur with any [Api] request
   http.Response errorFunction(
@@ -36,7 +35,7 @@ class MatchesServices{
   }
 
   Future<dynamic> getAllMatches() async {
-    var url= 'http://127.0.0.1:8000/api/match/index';
+    var url= '${Globals.baseUrl}/api/match/index';
 
     var response = await http.get(
         Uri.parse(url),
@@ -59,7 +58,7 @@ class MatchesServices{
 
   }
   Future<void> createNewMatch(MatchModel matchModel, String token) async {
-    var url= 'http://127.0.0.1:8000/api/match/store';
+    var url= '${Globals.baseUrl}/api/match/store';
 
     var response = await http.post(
         Uri.parse(url),
@@ -94,7 +93,7 @@ class MatchesServices{
 
   }
   Future<void> editMatch(MatchModel matchModel, String token) async {
-    var url= 'http://127.0.0.1:8000/api/match/update/${matchModel.id}';
+    var url= '${Globals.baseUrl}/api/match/update/${matchModel.id}';
 
     var response = await http.post(
         Uri.parse(url),
@@ -129,7 +128,7 @@ class MatchesServices{
 
   }
   Future<dynamic> getAllTeams(String token) async {
-    var url= 'http://127.0.0.1:8000/api/team/index';
+    var url= '${Globals.baseUrl}/api/team/index';
 
     var response = await http.get(
         Uri.parse(url),
@@ -154,7 +153,7 @@ class MatchesServices{
 
   }
   Future<dynamic> getAllStadiums(String token) async {
-    var url= 'http://127.0.0.1:8000/api/stadium/index';
+    var url= '${Globals.baseUrl}/api/stadium/index';
 
     var response = await http.get(
         Uri.parse(url),
@@ -179,7 +178,7 @@ class MatchesServices{
 
   }
   Future<dynamic> getAllReservedSeatsForMatch(int matchId) async {
-    var url= 'http://127.0.0.1:8000/api/ticket/match/$matchId';
+    var url= '${Globals.baseUrl}/api/ticket/match/$matchId';
 
     var response = await http.get(
         Uri.parse(url),
@@ -204,7 +203,7 @@ class MatchesServices{
 
   }
   Future<dynamic> createNewStadium(StadiumModel stadiumModel, String token) async {
-    var url= 'http://127.0.0.1:8000/api/stadium/store';
+    var url= '${Globals.baseUrl}/api/stadium/store';
 
     var response = await http.post(
         Uri.parse(url),

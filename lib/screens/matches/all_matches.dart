@@ -29,7 +29,7 @@ class _AllMatchesState extends State<AllMatches> with SingleTickerProviderStateM
   @override
   void initState() {
     // TODO: implement initState
-    super.initState();
+
 
     animationController=   AnimationController(vsync: this,
         duration: const Duration(seconds: 2))..repeat();
@@ -57,7 +57,7 @@ class _AllMatchesState extends State<AllMatches> with SingleTickerProviderStateM
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     });
-
+    super.initState();
   }
   void getAllMatchesInfo()async{
     bool success=await Provider.of<MatchProvider>(context,listen: false).getAllMatchesAPI();
@@ -228,18 +228,7 @@ class _AllMatchesState extends State<AllMatches> with SingleTickerProviderStateM
                 crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: const [
-                Padding(
-                   padding: EdgeInsets.all(16.0),
-                   child: Text("Trending News",
-                    style: TextStyle(
-                        color: mainRed,
-                        fontSize: 22,
-                        fontFamily: "Montserrat",
-                        fontWeight: FontWeight.w700
-                    ),
-                ),
 
-                 ),
 
 
               ],

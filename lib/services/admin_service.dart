@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:fifa2022/config/globals.dart';
 import 'package:fifa2022/models/admin.dart';
 import 'package:fifa2022/models/user.dart';
 import 'package:http/http.dart' as http;
@@ -8,20 +9,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AdminServices {
   final String _weirdConnection = '''
             {
-              "meta": {
-                        "status": "502",
-                         "msg": "Weird Connection. Try Again?"
-                      }
+              "success": false,
+              "message":"Weird Connection. Try Again?"
             }
         ''';
 
   final String _failed = '''
+            
             {
-              "meta": {
-                        "status": "404",
-                         "msg": "Failed to Connect to the server"
-                      }
+              "success": false,
+              "message":"Failed to Connect to the server"
             }
+             
         ''';
   /// When an error occur with any [Api] request
   http.Response errorFunction(
@@ -37,7 +36,7 @@ class AdminServices {
   }
 
   Future<dynamic> loginAdmin(String username, String password) async {
-    var url= 'http://127.0.0.1:8000/api/admins/login';
+    var url= '${Globals.baseUrl}/api/admins/login';
     var response = await http.post(
         Uri.parse(url),
         body: {
@@ -75,7 +74,7 @@ class AdminServices {
   }
 
   Future<dynamic> getAllUsers(String token) async {
-    var url= 'http://127.0.0.1:8000/api/users/index';
+    var url= '${Globals.baseUrl}/api/users/index';
 
     var response = await http.get(
         Uri.parse(url),
@@ -99,7 +98,7 @@ class AdminServices {
 
   }
   Future<dynamic> getAllUsersWhoWantToBeManager(String token) async {
-    var url= 'http://127.0.0.1:8000/api/users/bemanager';
+    var url= '${Globals.baseUrl}/api/users/bemanager';
 
     var response = await http.get(
         Uri.parse(url),
@@ -123,7 +122,7 @@ class AdminServices {
 
   }
   Future<dynamic> makeUserManager(String token, int id) async {
-    var url= 'http://127.0.0.1:8000/api/users/bemanager/${id.toString()}';
+    var url= '${Globals.baseUrl}/api/users/bemanager/${id.toString()}';
 
     var response = await http.put(
         Uri.parse(url),
@@ -147,7 +146,7 @@ class AdminServices {
 
   }
   Future<bool> deleteUser(String token, int id) async {
-    var url= 'http://127.0.0.1:8000/api/users/delete/${id.toString()}';
+    var url= '${Globals.baseUrl}/api/users/delete/${id.toString()}';
     var response = await http.delete(
         Uri.parse(url),
         headers: {'Accept': 'application/json',

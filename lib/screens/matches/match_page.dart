@@ -51,10 +51,12 @@ class _MatchPageState extends State<MatchPage> with SingleTickerProviderStateMix
 
     animationController=   AnimationController(vsync: this,
         duration: const Duration(seconds: 2))..repeat();
-    getInfo();
+    Future.delayed(Duration.zero,()async{
+      await getInfo();
+    });
     super.initState();
   }
-  void getInfo()async{
+  Future<void> getInfo()async{
     if(int.tryParse(widget.id)!=null) {
       if (Provider
           .of<MatchProvider>(context, listen: false)
@@ -85,6 +87,7 @@ class _MatchPageState extends State<MatchPage> with SingleTickerProviderStateMix
         }
         else {
           // TODO:: match not found
+          showErrorSnackBar(context, "Match not found!");
         }
       }
       else {
@@ -120,6 +123,8 @@ class _MatchPageState extends State<MatchPage> with SingleTickerProviderStateMix
                 }
                 else {
                   // TODO:: match not found
+                  showErrorSnackBar(context, "Match not found!");
+
                 }
                 Navigator.pop(context);
 
@@ -138,7 +143,8 @@ class _MatchPageState extends State<MatchPage> with SingleTickerProviderStateMix
     }
     else
     {
-      // TODO:: match not found
+      showErrorSnackBar(context, "Match not found!");
+
 
     }
   }
