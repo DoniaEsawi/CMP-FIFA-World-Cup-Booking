@@ -122,7 +122,7 @@ class _AppBarCustomState extends State<AppBarCustom> with SingleTickerProviderSt
           NavBarItem(
             text: "About",
             onTap: () {
-              js.context.callMethod('open', ['https://github.com/Raghad-Khaled/FIFA_World_Cup']);
+              js.context.callMethod('open', ['https://github.com/DoniaEsawi/CMP-FIFA-World-Cup-Booking']);
             },
           ),
         ]:Globals.isManager?[
@@ -169,7 +169,7 @@ class _AppBarCustomState extends State<AppBarCustom> with SingleTickerProviderSt
           NavBarItem(
           text: "About",
           onTap: () {
-          js.context.callMethod('open', ['https://github.com/Raghad-Khaled/FIFA_World_Cup']);
+          js.context.callMethod('open', ['https://github.com/DoniaEsawi/CMP-FIFA-World-Cup-Booking']);
           },
           ),
       ]:[
@@ -208,7 +208,7 @@ class _AppBarCustomState extends State<AppBarCustom> with SingleTickerProviderSt
     NavBarItem(
     text: "About",
     onTap: () {
-    js.context.callMethod('open', ['https://github.com/Raghad-Khaled/FIFA_World_Cup']);
+    js.context.callMethod('open', ['https://github.com/DoniaEsawi/CMP-FIFA-World-Cup-Booking']);
     },
     ),]
         ,

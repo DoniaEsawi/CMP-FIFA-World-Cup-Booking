@@ -94,13 +94,13 @@ class CardTask extends StatelessWidget {
                     ),
                     const Spacer(flex: 1),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         doneButton("Accept", Colors.white, mainRed,
                             EvaIcons.checkmarkCircle2Outline,onPressed
 
                         ),
-                        CountryFlags.flag("eg",width: 20,height: 20,)
+
 
                       ],
                     ),
