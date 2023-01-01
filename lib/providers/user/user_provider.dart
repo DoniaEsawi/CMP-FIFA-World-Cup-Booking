@@ -21,8 +21,25 @@ class AuthProvider with ChangeNotifier {
         setUser(User(token: "none"));
         notifyListeners();
         print(user.token);
+        bool setAdminLoggedIn=false;
+        String admin_name="";
+        String adminToken="";
         SharedPreferences pref = await SharedPreferences.getInstance();
+        if(pref.getBool("admin_logged_in")!=null&&pref.getBool("admin_logged_in")==true)
+          {
+            setAdminLoggedIn=true;
+            admin_name= pref.getString("admin_name")!;
+            adminToken= pref.getString("admin_token")!;
+          }
+
+
         await pref.clear();
+        if(setAdminLoggedIn)
+          {
+            pref.setBool("admin_logged_in", true);
+            pref.setString("admin_token", adminToken);
+            pref.setString("admin_name", admin_name);
+          }
         Globals.isLoggedIn = false;
         Globals.token = "none";
         return true;
