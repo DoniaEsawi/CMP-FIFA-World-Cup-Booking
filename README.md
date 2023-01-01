@@ -1,16 +1,44 @@
-# fifa2022
+<center>
+<img src="C:\flutter_projects\fifa2022\assets\images\logo2.png" alt="logo" width="150"  />
+<H1>
+FIFA Qatar 2022 <br>🎫 Booking System 🎫
+</H1>
 
-A ticket booking web app
+</center>
 
-## Getting Started
+## 📌 Introduction
 
-This project is a starting point for a Flutter application.
+This is a simple booking system for FIFA Qatar 2022. This project is made using Flutter and Laravel. This project is made for learning purpose only.
 
-A few resources to get you started if this is your first Flutter project:
+## 📌 Features
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### 🤸‍♀️ Fan
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Can register and login.
+- Can book tickets.
+- Can see his/her booking history.
+- Can delete his/her booking if the match is after 3 days or more.
+- Can see the match details.
+- Can edit his/her profile.
+
+### 👩‍💼👨‍💼 Manager
+
+- Can register and login.
+- Can create new match.
+- Can edit the details of an existing match.
+- Can add new stadium.
+- Can see the match details.
+- Can edit his/her profile.
+
+### 👩‍💻 Admin
+
+- Can approve new users requets to become a manager.
+- Can delete existing users.
+- Can view all the users of the system.
+
+## 📌 Demo
+
+## 📌 Tools Used
+
+- Flutter
+- Laravel
